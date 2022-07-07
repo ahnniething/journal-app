@@ -12,9 +12,10 @@ const pantone = {
 };
 
 const colors = {
-  bgColor: pantone.amusements.fuchsiaPink,
-  textColor: pantone.amusements.veryPery,
-  cardColor: pantone.amusements.icedCoffee,
-  btnColor: pantone.amusements.paradisePink,
+  bgColor: pantone.amusements.cornsilk,
+  textColor: pantone.amusements.paradisePink,
+  cardColor: pantone.amusements.fuchsiaPink,
+  btnColor: pantone.amusements.veryPery,
+  btnTintColor: pantone.amusements.icedCoffee,
 };
 export default colors;

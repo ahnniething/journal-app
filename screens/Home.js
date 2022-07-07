@@ -7,11 +7,12 @@ const View = styled.View`
   flex: 1;
   padding: 0px 50px;
   padding-top: 100px;
-  background-color: ${colors.bgColor};
+  background-color: ${colors.bgColor}
 `;
 const Title = styled.Text`
   color: ${colors.textColor};
   font-size: 38px;
+  font-weight: 500;
   margin-bottom: 100px;
 `;
 const Btn = styled.TouchableOpacity`
@@ -32,7 +33,7 @@ const Home = ({ navigation: { navigate } }) => (
   <View>
     <Title>My journal</Title>
     <Btn onPress={() => navigate("Write")}>
-      <Ionicons name="add" color="white" size={40} />
+      <Ionicons name="add" color={colors.btnTintColor} size={40} />
     </Btn>
   </View>
 );
