@@ -14,8 +14,9 @@ const pantone = {
 const colors = {
   bgColor: pantone.amusements.cornsilk,
   textColor: pantone.amusements.paradisePink,
-  cardColor: pantone.amusements.fuchsiaPink,
   btnColor: pantone.amusements.veryPery,
   btnTintColor: pantone.amusements.icedCoffee,
+  cardColor: pantone.amusements.fuchsiaPink,
+  cardTitleColor: "white",
 };
 export default colors;
