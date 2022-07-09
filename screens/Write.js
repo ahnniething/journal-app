@@ -1,7 +1,8 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 import colors from "../colors";
+import { Alert } from "react-native";
 
 const View = styled.View`
   background-color: ${colors.bgColor};
@@ -55,17 +56,22 @@ const EmotionText = styled.Text`
   font-size: 24px;
 `;
 
-const emotions = [ "🥲", "🤬", "🤗", "🥰", "😊", "🤩"];
+const emotions = ["🥰", "😂", "😭", "🤬", "🤩", "😰"];
 
 const Write = () => {
-
-
-  const [selectedEmotion, setEmotion] = useState(null);
-
+  const [selectedEmotion, setEmotion] = useState("");
+  const [feelings, setFeelings] = useState("");
+  const onChangeText = (text) => setFeelings(text);
+  const onEmotionPress = (face) => setEmotion(face);
+  const onSubmit = () => {
+    if(feelings === "" || selectedEmotion == null){
+      return Alert.alert("please complete the form.");
+    }
+  };
   return (
     <View>
-    <Title>How do you feel today ? </Title>
-    <Emotions>
+      <Title>How do you feel today ? </Title>
+      <Emotions>
         {emotions.map((emotion, index) => (
           <Emotion
             selected={emotion === selectedEmotion}
@@ -76,10 +82,18 @@ const Write = () => {
           </Emotion>
         ))}
       </Emotions>
-    <TextInput placeholder="Write your feelings..."   placeholderTextColor={"grey"}></TextInput>
-    <Btn><BtnText>Save</BtnText></Btn>
-  </View>
-  )
-
-}
+      <TextInput
+      returnKeyType="done"
+      onSubmitEditing={onSubmit}
+      onChangeText={onChangeText}
+        placeholder="Write your feelings..."
+        placeholderTextColor={"grey"}
+        value={feelings}
+      ></TextInput>
+      <Btn>
+        <BtnText>Save</BtnText>
+      </Btn>
+    </View>
+  );
+};
 export default Write;
