@@ -3,6 +3,7 @@ import React, {useState} from "react";
 import Navigator from "./navigator";
 import Realm from "realm";
 import AppLoading from "expo-app-loading";
+import { DBContext } from './context';
 
 const FeelingSchema = {
   name: "Feeling",
@@ -14,7 +15,6 @@ const FeelingSchema = {
   primaryKey: "_id",
 };
 
-const Context = React.createContext();
 
 export default function App() {
   const [ready, setReady] = useState(false);
@@ -37,11 +37,11 @@ export default function App() {
     );
   }
   return (
-    <Context.Provider value={realm}>
+    <DBContext.Provider value={realm}>
     <NavigationContainer>
     <Navigator />
   </NavigationContainer>
-  </Context.Provider>
+  </DBContext.Provider>
   );
 }
 

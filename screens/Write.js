@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 import colors from "../colors";
 import { Alert } from "react-native";
+import { useDB } from "../context";
 
 const View = styled.View`
   background-color: ${colors.bgColor};
@@ -59,6 +60,7 @@ const EmotionText = styled.Text`
 const emotions = ["🥰", "😂", "😭", "🤬", "🤩", "😰"];
 
 const Write = () => {
+  const realm = useDB();
   const [selectedEmotion, setEmotion] = useState("");
   const [feelings, setFeelings] = useState("");
   const onChangeText = (text) => setFeelings(text);
