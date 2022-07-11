@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 import colors from "../colors";
@@ -59,7 +59,7 @@ const EmotionText = styled.Text`
 
 const emotions = ["🥰", "😂", "😭", "🤬", "🤩", "😰"];
 
-const Write = () => {
+const Write = ({ navigation: { goBack } }) => {
   const realm = useDB();
   const [selectedEmotion, setEmotion] = useState("");
   const [feelings, setFeelings] = useState("");
@@ -69,6 +69,16 @@ const Write = () => {
     if(feelings === "" || selectedEmotion == null){
       return Alert.alert("please complete the form.");
     }
+    console.log("realm:", realm);
+    const feeling = realm.write(() => {
+      realm.create("Feeling", {
+        _id: Date.now(),
+        emotion: selectedEmotion,
+        message: feelings,
+      });
+    });
+    console.log("feeling:", feeling);
+    goBack();
   };
   return (
     <View>
