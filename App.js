@@ -14,14 +14,17 @@ const FeelingSchema = {
   primaryKey: "_id",
 };
 
+const Context = React.createContext();
+
 export default function App() {
   const [ready, setReady] = useState(false);
+  const [realm, setRealm] =useState(null);
   const startLoading = async () => {
-    const realm = await Realm.open({
+    const connection = await Realm.open({
       path: "journalDB",
       schema: [FeelingSchema],
     });
-    console.log("realm:::", realm);
+    setRealm(connection);
   };
   const onFinish = () => setReady(true);
   if (!ready) {
@@ -34,9 +37,11 @@ export default function App() {
     );
   }
   return (
+    <Context.Provider value={realm}>
     <NavigationContainer>
     <Navigator />
   </NavigationContainer>
+  </Context.Provider>
   );
 }
 
