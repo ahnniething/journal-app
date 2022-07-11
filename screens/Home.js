@@ -3,6 +3,7 @@ import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 import colors from "../colors";
 import { useDB } from "../context";
+import { FlatList } from "react-native";
 
 const View = styled.View`
   flex: 1;
@@ -14,7 +15,7 @@ const Title = styled.Text`
   color: ${colors.textColor};
   font-size: 38px;
   font-weight: 500;
-  margin-bottom: 100px;
+  margin-bottom: 50px;
 `;
 const Btn = styled.TouchableOpacity`
   position: absolute;
@@ -29,16 +30,54 @@ const Btn = styled.TouchableOpacity`
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
 `;
 
+const Record = styled.View`
+  background-color: ivory;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 20px;
+  border-radius: 10px;
+`;
+
+const Emotion = styled.Text`
+  font-size: 24px;
+  margin-right: 10px;
+`;
+const Message = styled.Text`
+  font-size: 18px;
+`;
+const Separator = styled.View`
+  height: 10px;
+`;
+
 const Home = ({ navigation: { navigate } }) => {
   const realm = useDB();
   const [feelings, setFeelings] = useState(realm.objects("Feeling"));
   useEffect(() => {
-    const happy = feelings.filtered("emotion = '🥰' ");
-    console.log(happy);
+    const feelings = realm.objects("Feeling");
+    setFeelings(feelings);
+    feelings.addListener(() => {
+      const feelings = realm.objects("Feeling");
+      setFeelings(feelings);
+    });
+    return () => {
+      feelings.removeAllListeners();
+    };
   }, []);
   return (
     <View>
       <Title>My journal</Title>
+      <FlatList
+        data={feelings}
+        contentContainerStyle={{ paddingVertical: 10 }}
+        ItemSeparatorComponent={Separator}
+        keyExtractor={(feeling) => feeling._id + ""}
+        renderItem={({ item }) => (
+          <Record>
+            <Emotion>{item.emotion}</Emotion>
+            <Message>{item.message}</Message>
+          </Record>
+        )}
+      />
       <Btn onPress={() => navigate("Write")}>
         <Ionicons name="add" color={colors.btnTintColor} size={40} />
       </Btn>
