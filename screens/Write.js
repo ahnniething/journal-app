@@ -61,7 +61,7 @@ const emotions = ["🥰", "😂", "😭", "🤬", "🤩", "😰"];
 
 const Write = ({ navigation: { goBack } }) => {
   const realm = useDB();
-  const [selectedEmotion, setEmotion] = useState("");
+  const [selectedEmotion, setEmotion] = useState(null);
   const [feelings, setFeelings] = useState("");
   const onChangeText = (text) => setFeelings(text);
   const onEmotionPress = (face) => setEmotion(face);
@@ -69,15 +69,14 @@ const Write = ({ navigation: { goBack } }) => {
     if(feelings === "" || selectedEmotion == null){
       return Alert.alert("please complete the form.");
     }
-    console.log("realm:", realm);
-    const feeling = realm.write(() => {
-      realm.create("Feeling", {
+    realm.write(() => {
+      const feeling = realm.create("Feeling", {
         _id: Date.now(),
         emotion: selectedEmotion,
         message: feelings,
       });
+      console.log("feeling:", feeling);
     });
-    console.log("feeling:", feeling);
     goBack();
   };
   return (
@@ -102,7 +101,7 @@ const Write = ({ navigation: { goBack } }) => {
         placeholderTextColor={"grey"}
         value={feelings}
       ></TextInput>
-      <Btn>
+      <Btn onPress={onSubmit}>
         <BtnText>Save</BtnText>
       </Btn>
     </View>
