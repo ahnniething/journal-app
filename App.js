@@ -4,6 +4,7 @@ import Navigator from "./navigator";
 import Realm from "realm";
 import AppLoading from "expo-app-loading";
 import { DBContext } from "./context";
+import { Platform, UIManager } from "react-native";
 
 const FeelingSchema = {
   name: "Feeling",
@@ -14,6 +15,12 @@ const FeelingSchema = {
   },
   primaryKey: "_id",
 };
+
+if (Platform.OS === "android") {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+}
 
 export default function App() {
   const [ready, setReady] = useState(false);
