@@ -56,6 +56,7 @@ const Home = ({ navigation: { navigate } }) => {
     const feelings = realm.objects("Feeling");
     feelings.addListener((feelings, changes) => {
       LayoutAnimation.linear();
+      // LayoutAnimation.spring();
       setFeelings(feelings.sorted("_id", true));
     });
     return () => {
