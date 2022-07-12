@@ -62,8 +62,8 @@ const Home = ({ navigation: { navigate } }) => {
   useEffect(() => {
     const feelings = realm.objects("Feeling");
     feelings.addListener((feelings, changes) => {
-      LayoutAnimation.linear();
-      // LayoutAnimation.spring();
+      // LayoutAnimation.linear();
+      LayoutAnimation.spring();
       setFeelings(feelings.sorted("_id", true));
     });
     return () => {
@@ -79,10 +79,10 @@ const Home = ({ navigation: { navigate } }) => {
   return (
     <View>
       <Title>My journal</Title>
-      <AdMobBanner
+      {/* <AdMobBanner
       bannerSize="fullBanner"
       adUnitID="ca-app-pub-3940256099942544/2934735716"
-      ></AdMobBanner>
+      ></AdMobBanner> */}
       <FlatList
       style={{marginVertical: 50, width: "100%"}}
         data={feelings}

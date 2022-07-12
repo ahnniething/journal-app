@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components/native";
-import { Ionicons } from "@expo/vector-icons";
 import colors from "../colors";
-import { Alert } from "react-native";
+import { Alert, Platform } from "react-native";
 import { useDB } from "../context";
-import { AdMobInterstitial } from "expo-ads-admob";
+import { AdMobInterstitial, AdMobRewarded } from "expo-ads-admob";
 
 const View = styled.View`
   background-color: ${colors.bgColor};
@@ -59,6 +58,12 @@ const EmotionText = styled.Text`
 `;
 
 const emotions = ["🥰", "😂", "😭", "🤬", "🤩", "😰"];
+const adUnitID = Platform.select({
+  // https://developers.google.com/admob/ios/test-ads
+  ios: "ca-app-pub-3940256099942544/1712485313",
+  // https://developers.google.com/admob/android/test-ads
+  android: "ca-app-pub-3940256099942544/5224354917",
+});
 
 const Write = ({ navigation: { goBack } }) => {
   const realm = useDB();
@@ -68,22 +73,26 @@ const Write = ({ navigation: { goBack } }) => {
   const onEmotionPress = (face) => setEmotion(face);
   const onSubmit = async () => {
     if (feelings === "" || selectedEmotion == null) {
-      return Alert.alert("please complete the form.");
+      return Alert.alert("Please let me know your feelings today :)");
     }
-    realm.write(() => {
-      const feeling = realm.create("Feeling", {
-        _id: Date.now(),
-        emotion: selectedEmotion,
-        message: feelings,
-      });
+
+    await AdMobRewarded.setAdUnitID(adUnitID);
+    await AdMobRewarded.requestAdAsync({ servePersonalizedAds: true });
+    await AdMobRewarded.showAdAsync();
+    AdMobRewarded.addEventListener("rewardedVideoUserDidEarnReward", () => {
+      AdMobRewarded.addEventListener("rewardedVideoDidDismiss", () => {
+        realm.write(() => {
+          realm.create("Feeling", {
+            _id: Date.now(),
+            emotion: selectedEmotion,
+            message: feelings,
+          });
+        });
+        goBack();
+      })
     });
-    await AdMobInterstitial.setAdUnitID(
-      "ca-app-pub-3940256099942544/4411468910"
-    );
-    await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true });
-    await AdMobInterstitial.showAdAsync();
-    // goBack();
   };
+
   return (
     <View>
       <Title>How do you feel today ? </Title>
