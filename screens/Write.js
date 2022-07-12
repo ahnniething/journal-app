@@ -75,7 +75,6 @@ const Write = ({ navigation: { goBack } }) => {
         emotion: selectedEmotion,
         message: feelings,
       });
-      console.log("feeling:", feeling);
     });
     goBack();
   };
