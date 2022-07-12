@@ -79,6 +79,7 @@ const Write = ({ navigation: { goBack } }) => {
     await AdMobRewarded.setAdUnitID(adUnitID);
     await AdMobRewarded.requestAdAsync({ servePersonalizedAds: true });
     await AdMobRewarded.showAdAsync();
+    AdMobRewarded.removeAllListeners();
     AdMobRewarded.addEventListener("rewardedVideoUserDidEarnReward", () => {
       AdMobRewarded.addEventListener("rewardedVideoDidDismiss", () => {
         realm.write(() => {
