@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import colors from "../colors";
 import { Alert } from "react-native";
 import { useDB } from "../context";
+import { AdMobInterstitial } from "expo-ads-admob";
 
 const View = styled.View`
   background-color: ${colors.bgColor};
@@ -65,8 +66,8 @@ const Write = ({ navigation: { goBack } }) => {
   const [feelings, setFeelings] = useState("");
   const onChangeText = (text) => setFeelings(text);
   const onEmotionPress = (face) => setEmotion(face);
-  const onSubmit = () => {
-    if(feelings === "" || selectedEmotion == null){
+  const onSubmit = async () => {
+    if (feelings === "" || selectedEmotion == null) {
       return Alert.alert("please complete the form.");
     }
     realm.write(() => {
@@ -76,7 +77,12 @@ const Write = ({ navigation: { goBack } }) => {
         message: feelings,
       });
     });
-    goBack();
+    await AdMobInterstitial.setAdUnitID(
+      "ca-app-pub-3940256099942544/4411468910"
+    );
+    await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true });
+    await AdMobInterstitial.showAdAsync();
+    // goBack();
   };
   return (
     <View>
@@ -93,9 +99,9 @@ const Write = ({ navigation: { goBack } }) => {
         ))}
       </Emotions>
       <TextInput
-      returnKeyType="done"
-      onSubmitEditing={onSubmit}
-      onChangeText={onChangeText}
+        returnKeyType="done"
+        onSubmitEditing={onSubmit}
+        onChangeText={onChangeText}
         placeholder="Write your feelings..."
         placeholderTextColor={"grey"}
         value={feelings}
