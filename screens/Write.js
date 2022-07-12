@@ -3,6 +3,7 @@ import styled from "styled-components/native";
 import { Ionicons } from "@expo/vector-icons";
 import colors from "../colors";
 import { Alert } from "react-native";
+import { useDB } from "../context";
 
 const View = styled.View`
   background-color: ${colors.bgColor};
@@ -58,8 +59,9 @@ const EmotionText = styled.Text`
 
 const emotions = ["🥰", "😂", "😭", "🤬", "🤩", "😰"];
 
-const Write = () => {
-  const [selectedEmotion, setEmotion] = useState("");
+const Write = ({ navigation: { goBack } }) => {
+  const realm = useDB();
+  const [selectedEmotion, setEmotion] = useState(null);
   const [feelings, setFeelings] = useState("");
   const onChangeText = (text) => setFeelings(text);
   const onEmotionPress = (face) => setEmotion(face);
@@ -67,6 +69,14 @@ const Write = () => {
     if(feelings === "" || selectedEmotion == null){
       return Alert.alert("please complete the form.");
     }
+    realm.write(() => {
+      const feeling = realm.create("Feeling", {
+        _id: Date.now(),
+        emotion: selectedEmotion,
+        message: feelings,
+      });
+    });
+    goBack();
   };
   return (
     <View>
@@ -90,7 +100,7 @@ const Write = () => {
         placeholderTextColor={"grey"}
         value={feelings}
       ></TextInput>
-      <Btn>
+      <Btn onPress={onSubmit}>
         <BtnText>Save</BtnText>
       </Btn>
     </View>
